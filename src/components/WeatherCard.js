@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardItem, Text, Body, Left, Thumbnail, Button } from 'native-base';
+import { Card, CardItem, Text, Body, Left, Thumbnail, Button, View, Spinner } from 'native-base';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
+import { NavigationEvents } from 'react-navigation';
 
 import { addStartWeather, addEndWeather } from '../redux/actions/currentActivityActions';
 
@@ -13,40 +14,76 @@ class WeatherCard extends Component {
         super(props);
 
         this.state = {
-            zipcode: 0,
+            loading: true,
+            latitude: 0,
+            longitude: 0,
             weather: {}
         }
     }
 
     componentDidMount() {
-        if (this.props.type != 'load') {
-            this._loadWeatherInfo();
-        } else if (this.props.type === 'loadStart') {
+        
+        if (this.props.type === 'loadStart') {
             this.setState({ weather: this.props.startWeather })
-        } else if (this.props.type === 'loadEnd') {
+        }
+        else if (this.props.type === 'loadEnd') {
             this.setState({weather: this.props.endWeather})
+        }
+        else {
+            this.gpsID = navigator.geolocation.watchPosition(
+                (position) => {
+
+                    this.setState({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }, () => this._loadWeatherInfo());
+                },
+                (error) => console.log("Error:", error),
+                { enableHighAccuracy: true, timeout: 100000, maximumAge: 1000, distanceFilter: 10000 },
+            );
         }
     }
 
     render() {
 
-        return (           
-            <Card>
-                <CardItem >
-                    <Thumbnail source={{ uri: this.state.weather.iconURL }} />
-                    <Body style={{justifyContent: 'center', alignItems: 'center'}}>
+        return (
+            <View>
+                {this._renderWeather()}
+            </View>
+        );
+    }
+
+    _renderWeather() {
+        if (this.state.loading && this.props.type != 'loadStart' && this.props.type != 'loadEnd') {
+            return (
+                <Card>
+                    <CardItem style={{ justifyContent: 'center', alignSelf: 'center' }}>
+                        <Text>Loading current weather   </Text>
+                        <Spinner color={'#03256C'} />
+                    </CardItem>
+                </Card>
+            );
+        }
+        else {
+            return (
+                <Card>
+                    <CardItem style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <Thumbnail
+                            source={{ uri: this.state.weather.iconURL }}
+                            style={{ position: 'absolute', top: 20, left: 10 }}
+                        />
                         <Text style={{ fontSize: 35 }}>{this.state.weather.city}</Text>
                         <Text style={{ fontSize: 25 }}>{this.state.weather.description}</Text>
-                    </Body>
-                    {this._renderRefreshButton()}
-                    {this._renderTitle()}
-                </CardItem>
-                <CardItem footer style={{  justifyContent: 'space-evenly', }}>
-                        <Text>Temperature: {this.state.weather.temp} F</Text>
-                        <Text>Humidity: {this.state.weather.humidity} %</Text>
-                </CardItem>
-            </Card>
-        );
+                        {this._renderRefreshButton()}
+                        {this._renderTitle()}
+                        <View style={{ width: '100%', justifyContent: 'space-evenly', flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 35, color: '#2541B2' }}>{this.state.weather.temp}{'\u00B0'} F</Text>
+                            <Text style={{ fontSize: 35, color: '#2541B2' }}>{this.state.weather.humidity}% H</Text>
+                        </View>
+                    </CardItem>
+                </Card>
+            );
+        }
     }
 
     _renderRefreshButton() {
@@ -55,7 +92,7 @@ class WeatherCard extends Component {
                 <Button
                     transparent
                     style={{ position: 'absolute', top: 0, right: 0 }}
-                    onPress={() => this._loadWeatherInfo()}
+                    onPress={() => this._refreshPressed()}
                 >
                     <MaterialIcon size={35} name={'refresh'} />
                 </Button>
@@ -65,19 +102,33 @@ class WeatherCard extends Component {
         }
     }
 
+    _refreshPressed() {
+        this.setState({ loading: true });
+        this.gpsID = navigator.geolocation.watchPosition(
+            (position) => {
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                }, () => this._loadWeatherInfo());
+            },
+            (error) => console.log("Error:", error),
+            { enableHighAccuracy: true, timeout: 100000, maximumAge: 1000, distanceFilter: 10000 },
+        );
+    }
+
     _renderTitle() {
         switch (this.props.type) {
             case 'loadStart':
                 return (
-                    <Text style={{ position: 'absolute', top: 5, left: 20 }}>Start Weather</Text>
+                    <Text style={{ position: 'absolute', top: 1, left: 10 }}>Start Weather</Text>
                 );
             case 'loadEnd':
                 return (
-                    <Text style={{ position: 'absolute', top: 5, left: 20 }}>End Weather</Text>
+                    <Text style={{ position: 'absolute', top: 1, left: 10 }}>End Weather</Text>
                 );
             case 'end':
                 return (
-                    <Text style={{ position: 'absolute', top: 5, left: 20 }}>End Weather</Text>
+                    <Text style={{ position: 'absolute', top: 1, left: 10 }}>End Weather</Text>
                 );
             default:
                 return null;
@@ -85,22 +136,14 @@ class WeatherCard extends Component {
     }
 
     _loadWeatherInfo() {
-
-        weatherService.getZipcode()
+        weatherService.getCurrentWeather(this.state.latitude, this.state.longitude)
             .then((results) => {
-                this.setState({ zipcode: results }, () => {
-                    weatherService.getCurrentWeather(this.state.zipcode)
-                        .then((results) => {
-                            this.setState({ weather: results }, () => this._saveStartWeather(results))
-                        })
-                        .catch(error => {
-                            console.error("Error: couldn\'t retrieve weather object");
-                        });
-                });
+                this.setState({ weather: results, loading: false }, () => this._saveStartWeather(results))
             })
-            .catch((error) => {
-                console.log('Error: couldn\'t retrieve zipcode.');
+            .catch(error => {
+                console.error("Error: couldn\'t retrieve weather object");
             });
+        navigator.geolocation.clearWatch(this.gpsID);
     }
 
     _saveStartWeather(weatherObj) {
@@ -113,7 +156,7 @@ class WeatherCard extends Component {
         }
         let min = today.getMinutes();
         if (min < 10) { min = '0' + min.toString()}
-        let time = ((today.getHours() % 13) + 1) + ":" + min;
+        let time = (((today.getHours() + 11) % 12) + 1) + ":" + min;
         let dateTime = date + " - " + time + ampm;
         let dateObj = {
             dateStr: dateTime,
@@ -127,6 +170,9 @@ class WeatherCard extends Component {
         }
     }
 
+    componentWillUnmount() {
+        navigator.geolocation.clearWatch(this.gpsID);
+    }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -2,28 +2,9 @@ import apiService from './ApiService';
 
 let WeatherService = class WeatherService {
 
-    constructor() {
-        this.zip = 0;
-    }
-
-    getZipcode() {
+    getCurrentWeather(lat, lng) {
         return new Promise((resolve, reject) => {
-            fetch(apiService.getZipcodeURL())
-                .then((response) => response.json())
-                .then((zipcodeData) => {
-                    resolve(zipcodeData.zip);
-                })
-                .catch((error) => {
-                    console.error(error);
-                    reject(error);
-                });
-        });
-    }
-
-    getCurrentWeather(zipcode) {
-        this.getLocation();
-        return new Promise((resolve, reject) => {
-            fetch(apiService.getWeatherURL(zipcode))
+            fetch(apiService.getWeatherURL(lat, lng))
                 .then((response) => response.json())
                 .then((data) => {
                     let weather = {

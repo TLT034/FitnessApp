@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardItem, Container, Header, Content, ListItem, CheckBox, Text, Body, List, Separator, Button, Icon, Left, Right, View } from 'native-base';
+import { Card, CardItem, Container, Header, Content,  Text, Body, Button, Left, Right, View } from 'native-base';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
 import BackgroundTimer from 'react-native-background-timer';
@@ -82,23 +82,30 @@ class DuringActivityScreen extends Component {
                             <Text style={{ fontSize: 75, color: '#2541B2' }}>{this._calcPace()}</Text>
                         </CardItem>
                     </Card>
-
-                    <Button
-                        rounded
-                        style={{ justifyContent: 'center', alignSelf: 'center', height: 75, width: '70%', marginTop: 50, backgroundColor: '#03256C' }}
-                        onPress={() => this._togglePause()}
-                    >
-                        <Text style={{ fontSize: 25, color: 'white' }}>{this._renderBtnTxt()}</Text>
-                    </Button>
-
-                
-                    <Button
-                        rounded
-                        style={{ justifyContent: 'center', alignSelf: 'center', height: 75, width: '70%', marginVertical: 20, backgroundColor: '#03256C' }}
-                        onPress={() => this._endActivity()}
-                    >
-                        <Text style={{ fontSize: 25, color: 'white' }}>End {this.props.currentActivity.type}</Text>
-                    </Button>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                        <Button
+                            rounded
+                            style={{
+                                justifyContent: 'center', alignSelf: 'center',
+                                height: 55, width: 150, marginTop: 50, borderColor: '#2541B2',
+                                borderWidth: 2, backgroundColor: '#f2f2f2'
+                            }}
+                            onPress={() => this._togglePause()}
+                        >
+                            <Text style={{ fontSize: 25, color: '#2541B2' }}>{this._renderBtnTxt()}</Text>
+                        </Button>
+                        <Button
+                            rounded
+                            style={{
+                                justifyContent: 'center', alignSelf: 'center',
+                                height: 55, width: 150, marginTop: 50, borderColor: '#2541B2',
+                                borderWidth: 2, backgroundColor: '#f2f2f2'
+                            }}
+                            onPress={() => this._endActivity()}
+                        >
+                            <Text style={{ fontSize: 25, color: '#2541B2' }}>End {this.props.currentActivity.type}</Text>
+                        </Button>
+                    </View>
                 </Content>
             </Container>
         );
@@ -147,9 +154,9 @@ class DuringActivityScreen extends Component {
 
     _renderBtnTxt() {
         if (this.state.paused) {
-            return 'Resume Activity';
+            return 'Resume';
         }
-        return 'Pause Activity';
+        return 'Pause';
     }
 
     _endActivity() {

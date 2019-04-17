@@ -19,8 +19,8 @@ export default class StartActivityScreen extends Component {
             <Container style={{ backgroundColor: '#f2f2f2' }} >
                 <Content>
                     <ActivitySelectCard />
-                    <WeatherCard refreshable={false} type={'start'} />
                     <MapCard title={'Starting Position'} type={'start'}/>
+                    <WeatherCard refreshable={false} type={'start'} />
                     <Card style={{ height: 50, margin: 0, padding: 0}}>
                         <CardItem style={{ height: 40, margin: 0, padding: 0, justifyContent: 'space-evenly'}}>
                             <Button

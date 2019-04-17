@@ -15,23 +15,30 @@ class TotalsCard extends Component {
         
         return (
             <Card>
-                <CardItem>
-                    <Body>
-                        <Text style={{ alignSelf: 'center', fontSize: 25, fontWeight: 'bold' }}>Stats</Text>
-                        <Text>Total Distance Traveled: {this.props.totals.distance.toFixed(2)} miles</Text>
-                        <Text>Total Exercise Time: {this._formatTime()}</Text>
-                        <View style={{ paddingTop: 5, width: '100%', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                            <View style={{ paddingHorizontal: 0, width: '32.66%', backgroundColor: '#06BEE1', alignItems: 'center' }} >
-                                <Text>Runs: {this.props.totals.runs}</Text>
-                            </View>
-                            <View style={{ paddingHorizontal: 0, width: '32.66%', backgroundColor: '#1768AC', alignItems: 'center' }} >
-                                <Text>Bikes: {this.props.totals.bikes}</Text>
-                            </View>
-                            <View style={{ paddingHorizontal: 0, width: '32.66%', backgroundColor: '#2541B2', alignItems: 'center' }} >
-                                <Text>Hikes: {this.props.totals.hikes}</Text>
-                            </View>
-                        </View>
-                    </Body>
+                <CardItem style={{ justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#f2f2f2' }}>
+                    <Text style={{ fontSize: 35, fontWeight: 'bold' }}>Stats</Text>
+                </CardItem>
+                <CardItem style={{ flexDirection: 'column', justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#f2f2f2' }}>
+                    <Text>Total Distance Traveled</Text>
+                    <Text style={{ fontSize: 25, color: '#2541B2' }}>{this.props.totals.distance.toFixed(2)} miles</Text>
+                </CardItem>
+                <CardItem style={{ flexDirection: 'column', justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: '#f2f2f2' }}>
+                    <Text>Total Exercise Time</Text>
+                    <Text style={{ fontSize: 25, color: '#2541B2' }}>{this._formatTime()}</Text>
+                </CardItem>
+                <CardItem style={{ justifyContent: 'space-evenly' }}>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Text>Runs</Text>
+                        <Text style={{ fontSize: 25, color: '#06BEE1' }}>{this.props.totals.runs}</Text>
+                    </View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Text>Bikes</Text>
+                        <Text style={{ fontSize: 25, color: '#1768AC' }}>{this.props.totals.bikes}</Text>
+                    </View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Text>Hikes</Text>
+                        <Text style={{ fontSize: 25, color: '#2541B2' }}>{this.props.totals.hikes}</Text>
+                    </View>
                 </CardItem>
             </Card>
         );

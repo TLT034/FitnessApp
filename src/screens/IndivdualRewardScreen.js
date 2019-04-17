@@ -60,7 +60,7 @@ class IndividualRewardScreen extends Component {
                                 transparent
                                 onPress={() => {
                                     this.props.clearActivity();
-                                    navigationService.navigate('Rewards');
+                                    navigationService.goBack();
                                 }}
                             >
                                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#2541B2' }}>Done</Text>

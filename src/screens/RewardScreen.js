@@ -29,7 +29,22 @@ class RewardScreen extends Component {
         return (
             <Container>
                 <NavigationEvents
-                    onDidFocus={() => this._allPressed()}
+                    onDidFocus={() => {
+                        switch (true) {
+                            case this.state.allActive:
+                                this._allPressed();
+                                break;
+                            case this.state.personalActive:
+                                this._personalPressed();
+                                break;
+                            case this.state.levelActive:
+                                this._levelPressed();
+                                break;
+                            case this.state.achievementActive:
+                                this._achievementPressed();
+                                break;
+                        }
+                    }}
                 />
                 <Segment style={{backgroundColor: '#03256C'}}> 
                     <Button first active={this.state.allActive}

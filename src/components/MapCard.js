@@ -3,6 +3,7 @@ import { Card, CardItem, Text, Body, Content, View, Spinner } from 'native-base'
 import MapView, { PROVIDER_GOOGLE, Callout, Marker, Polyline} from 'react-native-maps';
 import { PermissionsAndroid, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationEvents } from 'react-navigation';
 
 const LONGITUDE_DELTA = 0.005;
 const LATITUDE_DELTA = 0.005;
@@ -85,7 +86,15 @@ class MapCard extends Component {
     render() {
 
         return (
+
             <Card>
+                <NavigationEvents
+                    onWillBlur={() => {
+                        if (this.props.type === 'start') {
+                            navigator.geolocation.clearWatch(this.gpsID);
+                        }
+                    }}
+                />
                 <CardItem style={{ flexDirection: 'column' }}>
                     <View style={{ paddingBottom: 5, justifyContent: 'center' }}>
                         <Text style={{ fontSize: 20 }}>{this.props.title}</Text>
@@ -130,7 +139,7 @@ class MapCard extends Component {
             else {
                 return (
                     <View style={{ justifyContent: 'center', alignSelf: 'center', flexWrap: 'wrap' }}>
-                        <Text>You have to actually MOVE to track an activity, lazy..</Text>
+                        <Text>You have to actually MOVE to track an activity path, lazy..</Text>
                     </View>
                 );
             }

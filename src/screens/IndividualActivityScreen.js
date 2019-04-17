@@ -13,17 +13,16 @@ import navigationService from '../services/NavigationService';
 
 class IndividualActivityScreen extends Component {
     static navigationOptions = {
-        title: `type - date`
-    }
-
-    constructor(props) {
-        super(props);
-        
+        title: 'Activity'
     }
 
     render() {
         return (
             <Container>
+                <Header style={{ justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#03256C'}}>
+                    <Text style={{fontSize: 25, color: 'white' }}>{this.props.currentActivity.type}</Text>
+                    <Text style={{ fontSize: 25, color: 'white' }}>{this.props.currentActivity.date.dateStr}</Text>
+                </Header>
                 <Content>
                     <MapCard title={`Activity ${this.props.currentActivity.type} Path`} type={'end'} />
                     <Card>
@@ -72,7 +71,7 @@ class IndividualActivityScreen extends Component {
                                 transparent
                                 onPress={() => {
                                     this.props.clearActivity();
-                                    navigationService.navigate('Activities');
+                                    navigationService.goBack();
                                 }}
                             >
                                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#2541B2' }}>Done</Text>

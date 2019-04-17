@@ -22,7 +22,9 @@ class HomeScreen extends Component {
         super(props);
 
         this.state = {
-            active: false
+            active: false,
+            latitude: 0,
+            longitude: 0,
         }
     }
 
@@ -45,7 +47,7 @@ class HomeScreen extends Component {
                     onDidBlur={() => this.setState({active: false})}
                 />
                 <Content>
-                    <WeatherCard refreshable={true} />
+                    <WeatherCard refreshable={true} type={'home'} />
                     <TotalsCard />
                     <RewardsCard />
                 </Content>
@@ -60,19 +62,19 @@ class HomeScreen extends Component {
                         style={{ backgroundColor: '#06BEE1' }}
                         onPress={() => this._startActiviy('Run')}
                     >
-                        <MaterialIcon size={25} name={'run-fast'} />
+                        <MaterialIcon size={25} name={'run-fast'} color={'white'} />
                     </Button>
                     <Button
                         style={{ backgroundColor: '#1768AC' }}
                         onPress={() => this._startActiviy('Bike')}
                     >
-                        <MaterialIcon size={25} name={'bike'} />
+                        <MaterialIcon size={25} name={'bike'} color={'white'} />
                     </Button>
                     <Button
                         style={{ backgroundColor: '#2541B2' }}
                         onPress={() => this._startActiviy('Hike')}
                     >
-                        <MaterialIcon size={25} name={'image-filter-hdr'} />
+                        <MaterialIcon size={25} name={'image-filter-hdr'} color={'white'} />
                     </Button>
                 </Fab>
             </Container>

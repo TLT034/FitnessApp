@@ -47,6 +47,12 @@ let NavigationService = class NavigationService {
             })
         );
     }
+
+    goBack() {
+        this._navigator.dispatch(
+            NavigationActions.back()
+        );
+    }
 }
 
 const navigationService = new NavigationService();
@@ -81,7 +87,8 @@ const HomeStack = createStackNavigator(
 const RewardStack = createStackNavigator(
     {
         Rewards: RewardScreen,
-        IndividualReward: IndivdualRewardScreen
+        IndividualReward: IndivdualRewardScreen,
+        IndividualActivity: IndividualActivityScreen
     },
     {
         defaultNavigationOptions: {
@@ -133,14 +140,21 @@ const TopLevelNavigator = createAppContainer(createBottomTabNavigator(
                 let iconName;
                 if (routeName === 'Home') {
                     iconName = 'home';
-                } else if (routeName === 'Activities') {
-                    iconName = 'run-fast'
-                } else {
-                    iconName = 'trophy'
                 }
-
-                return <MaterialIcon name={iconName} size={25} color={'#03256C'} />;
+                else if (routeName === 'Activities') {
+                    iconName = 'run-fast';
+                }
+                else {
+                    iconName = 'trophy';
+                }
+                let iconColor;
+                focused ? iconColor = '#03256C' : iconColor = 'gray';
+                return <MaterialIcon name={iconName} size={25} color={iconColor} />;
             },
+            
         }),
+        tabBarOptions: {
+            activeTintColor: '#03256C',
+        },
     }
 ));
