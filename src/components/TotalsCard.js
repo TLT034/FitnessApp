@@ -3,13 +3,7 @@ import { Card, CardItem, Text, Body, Content, View, } from 'native-base';
 import { connect } from 'react-redux';
 
 
-
 class TotalsCard extends Component {
-
-    constructor(props) {
-        super(props);
-
-    }
 
     render() {
         
@@ -57,6 +51,7 @@ class TotalsCard extends Component {
     }
 
 }
+
 
 function mapStateToProps(state) {
     return {

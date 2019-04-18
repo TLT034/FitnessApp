@@ -1,15 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
 class LocalStorage {
-    constructor() {
-        AsyncStorage.getAllKeys()
-            .then(result => {
-                console.log("keys", result)
-            })
-            .catch(error => {
-
-            })
-    }
 
     add(key, value) {
         return AsyncStorage.setItem(key, JSON.stringify(value));

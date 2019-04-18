@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 
 import { addActivityType } from '../redux/actions/currentActivityActions';
+import { loadTotals } from '../redux/actions/totalActions';
+import { loadActivities } from '../redux/actions/activityActions';
+import { loadRewards } from '../redux/actions/rewardActions';
 
 import WeatherCard from '../components/WeatherCard';
 import TotalsCard from '../components/TotalsCard';
@@ -12,6 +15,7 @@ import RewardsCard from '../components/RewardsCard';
 import navigationService from '../services/NavigationService';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import dataController from '../services/DataController';
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -24,7 +28,7 @@ class HomeScreen extends Component {
         this.state = {
             active: false,
             latitude: 0,
-            longitude: 0,
+            longitude: 0
         }
     }
 
@@ -38,6 +42,8 @@ class HomeScreen extends Component {
         PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
         );
+
+        this._loadSavedData();
     }
 
     render() {
@@ -85,11 +91,35 @@ class HomeScreen extends Component {
         this.props.addActivityType(type);
         navigationService.navigate('StartActivity');
     }
+
+    _loadSavedData() {
+
+        dataController.getStorageItem('totals')
+            .then(result => {
+                this.props.loadTotals(result);
+            })
+            .catch(error => console.log('No saved totals',error));
+
+        dataController.getStorageItem('activities')
+            .then(result => {
+               this.props.loadActivities(result);
+            })
+            .catch(error => console.log('No saved activities', error));
+
+        dataController.getStorageItem('rewards')
+            .then(result => {
+                this.props.loadRewards(result);
+            })
+            .catch(error => console.log("No saved rewards",error));
+    }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        addActivityType: (activityType) => dispatch(addActivityType(activityType))
+        addActivityType: (activityType) => dispatch(addActivityType(activityType)),
+        loadTotals: (loadedTotals) => dispatch(loadTotals(loadedTotals)),
+        loadActivities: (loadedActs) => dispatch(loadActivities(loadedActs)),
+        loadRewards: (loadedRew) => dispatch(loadRewards(loadedRew))
     };
 }
 

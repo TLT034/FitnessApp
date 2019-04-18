@@ -7,13 +7,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class RewardsCard extends Component {
 
-    constructor(props) {
-        super(props);
-
-    }
-
     render() {
-
         return (
             <Card>
                 <CardItem header style={{justifyContent: 'center'}}>

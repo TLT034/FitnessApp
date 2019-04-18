@@ -1,4 +1,5 @@
-import { UPDATE_TOTALS } from '../actions/totalActions';
+import { UPDATE_TOTALS, LOAD_TOTALS } from '../actions/totalActions';
+import dataController from '../../services/DataController';
 
 
 let initialState = {
@@ -34,31 +35,31 @@ const totals = (state = initialState, action) => {
                 newBikes -= 1;
             }
 
+            let newState = { ...state, distance: newDist, duration: newDur };
             switch (action.activityType) {
                 case 'Run':
-                    return {
-                        ...state,
-                        distance: newDist,
-                        duration: newDur,
-                        runs: newRuns
-                    };
+                    newState = { ...newState, runs: newRuns };
+                    break;
                 case 'Bike':
-                    return {
-                        ...state,
-                        distance: newDist,
-                        duration: newDur,
-                        bikes: newBikes
-                    };
+                    newState = { ...newState, bikes: newBikes };
+                    break;
                 case 'Hike':
-                    return {
-                        ...state,
-                        distance: newDist,
-                        duration: newDur,
-                        hikes: newHikes
-                    };
-                default:
-                    return state;
+                    newState = { ...newState, hikes: newHikes };
+                    break;
             }
+
+            dataController.updateStorageItem('totals', newState)
+                .then(() => dataController.getStorageItem('totals'))
+                .then(result => {
+                    console.log(`totals updated!`);
+                    console.log(result);
+                })
+                .catch(error => console.error('Add Activity Error:', error));
+
+            return newState;
+
+        case LOAD_TOTALS:
+            return action.loadedTotals;
 
         default:
             return state;

@@ -1,11 +1,13 @@
 const ADD_ACTIVITY = "ADD_ACTIVITY";
 const FILTER_ACTIVITIES = "FILTER_ACTIVITES";
 const DELETE_ACTIVITY = "DELETE_ACTIVITY";
+const LOAD_ACTIVITIES = "LOAD_ACTIVITIES";
 
 export {
     ADD_ACTIVITY,
     FILTER_ACTIVITIES,
-    DELETE_ACTIVITY
+    DELETE_ACTIVITY,
+    LOAD_ACTIVITIES
 };
 
 
@@ -25,4 +27,9 @@ export const filterActivities = (activities, aType, sortBy, range) => ({
 export const deleteActivity = (id) => ({
     type: DELETE_ACTIVITY,
     id: id
+})
+
+export const loadActivities = (loadedActs) => ({
+    type: LOAD_ACTIVITIES,
+    loadedActs: loadedActs
 })

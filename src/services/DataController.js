@@ -24,7 +24,13 @@ class DataController {
     }
 
     addElementToStorageItem(key, elKey, elValue) {
-        return localStorage.merge(key, { [elKey]: elValue });
+        return new Promise((resolve, reject) => {
+            localStorage.merge(key, { [elKey]: elValue })
+                .then(result => {
+                    resolve(result);
+                })
+                .catch(error => reject(error));
+        });
     }
 
     removeStorageItem(key) {

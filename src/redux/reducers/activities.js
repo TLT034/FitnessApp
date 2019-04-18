@@ -1,4 +1,4 @@
-import { ADD_ACTIVITY, DELETE_ACTIVITY, } from '../actions/activityActions';
+import { ADD_ACTIVITY, DELETE_ACTIVITY, LOAD_ACTIVITIES } from '../actions/activityActions';
 import dataController from '../../services/DataController';
 
 let date = new Date();
@@ -63,6 +63,9 @@ const activities = (state = [], action) => {
             /***************************************************************************************/
 
             return state;
+
+        case LOAD_ACTIVITIES:
+            return Object.values(action.loadedActs);
 
         default:
             return state;
