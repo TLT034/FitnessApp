@@ -3,6 +3,7 @@ import { Card, CardItem, Container, Header, Content,  Text, Body, Button, Left, 
 import { connect } from 'react-redux';
 import haversine from 'haversine';
 import BackgroundTimer from 'react-native-background-timer';
+import { NavigationEvents } from 'react-navigation';
 
 import { addStats, addRouteCoords } from '../redux/actions/currentActivityActions';
 
@@ -161,16 +162,16 @@ class DuringActivityScreen extends Component {
 
     _endActivity() {
 
+        navigator.geolocation.clearWatch(this.gpsID);
         this.props.addStats(this.state.time, this.state.distance, (this.state.distance / (this.state.time / 3600)))
         this.props.addRouteCoords(this.state.routeCoordinates);
         BackgroundTimer.clearInterval(this.timer);
-        navigator.geolocation.clearWatch(this.gpsID);
         navigationService.navigate('PostActivity');
     }
 
     componentWillUnmount() {
-        BackgroundTimer.clearInterval(this.timer);
         navigator.geolocation.clearWatch(this.gpsID);
+        BackgroundTimer.clearInterval(this.timer);
     }
 }
 

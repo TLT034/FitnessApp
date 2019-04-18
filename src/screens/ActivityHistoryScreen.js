@@ -29,7 +29,7 @@ class ActivityHistoryScreen extends Component {
         return (
             <Container style={{ backgroundColor: '#f2f2f2' }} >
                 <NavigationEvents
-                    onDidFocus={() => this._applyFilters()}
+                    onWillFocus={() => this._applyFilters()}
                 />
                 <Content>
                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row' }} >

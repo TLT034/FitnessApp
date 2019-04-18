@@ -12,31 +12,54 @@ let initialState = {
 const totals = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_TOTALS:
+
+            let newDist = state.distance;
+            let newDur = state.duration;
+            let newRuns = state.runs;
+            let newBikes = state.bikes;
+            let newHikes = state.hikes
+
+            if (action.updateType === 'Increment') {
+                newDist += action.distance;
+                newDur += action.duration;
+                newRuns += 1;
+                newHikes += 1;
+                newBikes += 1;
+            }
+            else if (action.updateType === 'Decrement') {
+                newDist -= action.distance;
+                newDur -= action.duration;
+                newRuns -= 1;
+                newHikes -= 1;
+                newBikes -= 1;
+            }
+
             switch (action.activityType) {
                 case 'Run':
                     return {
                         ...state,
-                        distance: state.distance + action.distance,
-                        duration: state.duration + action.duration,
-                        runs: state.runs + 1
+                        distance: newDist,
+                        duration: newDur,
+                        runs: newRuns
                     };
                 case 'Bike':
                     return {
                         ...state,
-                        distance: state.distance + action.distance,
-                        duration: state.duration + action.duration,
-                        bikes: state.bikes + 1
+                        distance: newDist,
+                        duration: newDur,
+                        bikes: newBikes
                     };
                 case 'Hike':
                     return {
                         ...state,
-                        distance: state.distance + action.distance,
-                        duration: state.duration + action.duration,
-                        hikes: state.hikes + 1
+                        distance: newDist,
+                        duration: newDur,
+                        hikes: newHikes
                     };
-                default :
+                default:
                     return state;
             }
+
         default:
             return state;
     }

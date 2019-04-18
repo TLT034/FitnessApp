@@ -29,7 +29,7 @@ class RewardScreen extends Component {
         return (
             <Container>
                 <NavigationEvents
-                    onDidFocus={() => {
+                    onWillFocus={() => {
                         switch (true) {
                             case this.state.allActive:
                                 this._allPressed();

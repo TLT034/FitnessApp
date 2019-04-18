@@ -3,9 +3,11 @@ import { Image, Alert } from 'react-native';
 import { Card, CardItem, Container, Header, Content, ListItem, CheckBox, Text, Body, List, Separator, Button, Icon, Left, Right, Thumbnail } from 'native-base';
 import { connect } from 'react-redux';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NavigationEvents } from 'react-navigation';
 
 import { deleteActivity } from '../redux/actions/activityActions';
 import { clearActivity } from '../redux/actions/currentActivityActions';
+import { updateTotals } from '../redux/actions/totalActions';
 
 import WeatherCard from '../components/WeatherCard';
 import MapCard from '../components/MapCard';
@@ -18,7 +20,10 @@ class IndividualActivityScreen extends Component {
 
     render() {
         return (
-            <Container>
+            <Container style={{ backgroundColor: '#f2f2f2' }}>
+                <NavigationEvents
+                    onDidBlur={() => this.props.clearActivity()}
+                />
                 <Header style={{ justifyContent: 'space-evenly', alignItems: 'center', backgroundColor: '#03256C'}}>
                     <Text style={{fontSize: 25, color: 'white' }}>{this.props.currentActivity.type}</Text>
                     <Text style={{ fontSize: 25, color: 'white' }}>{this.props.currentActivity.date.dateStr}</Text>
@@ -123,25 +128,40 @@ class IndividualActivityScreen extends Component {
                     style: 'destructive',
                     onPress: () => {
                         this.props.deleteActivity(this.props.currentActivity.id);
-                        this.props.clearActivity();
-                        navigationService.navigate('Activities');
+                        this.props.updateTotals(
+                            'Decrement',
+                            this.props.currentActivity.distance,
+                            this.props.currentActivity.duration,
+                            this.props.currentActivity.type
+                        );
                     }
                 }
             ]
         );
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (prevProps.totals !== this.props.totals) {
+            this.props.clearActivity();
+            navigationService.navigate('Activities');
+        }
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         deleteActivity: (id) => dispatch(deleteActivity(id)),
-        clearActivity: () => dispatch(clearActivity())
+        clearActivity: () => dispatch(clearActivity()),
+        updateTotals: (uType, dist, dur, aType) => dispatch(updateTotals(uType,dist,dur,aType))
     };
 }
 
 function mapStateToProps(state) {
     return {
         currentActivity: state.currentActivity,
+        activities: state.activities,
+        totals: state.totals
     }
 }
 

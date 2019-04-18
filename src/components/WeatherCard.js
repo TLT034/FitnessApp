@@ -30,6 +30,7 @@ class WeatherCard extends Component {
             this.setState({weather: this.props.endWeather})
         }
         else {
+            this.setState({ loading: true });
             this.gpsID = navigator.geolocation.watchPosition(
                 (position) => {
 
@@ -72,7 +73,7 @@ class WeatherCard extends Component {
                             source={{ uri: this.state.weather.iconURL }}
                             style={{ position: 'absolute', top: 20, left: 10 }}
                         />
-                        <Text style={{ fontSize: 35 }}>{this.state.weather.city}</Text>
+                        <Text style={{ fontSize: 35, fontWeight: 'bold' }}>{this.state.weather.city}</Text>
                         <Text style={{ fontSize: 25 }}>{this.state.weather.description}</Text>
                         {this._renderRefreshButton()}
                         {this._renderTitle()}

@@ -227,6 +227,7 @@ class PostActivityScreen extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.activities !== this.props.activities) {
             this.props.updateTotals(
+                'Increment',
                 this.props.currentActivity.distance,
                 this.props.currentActivity.duration,
                 this.props.currentActivity.type
@@ -248,7 +249,7 @@ function mapDispatchToProps(dispatch) {
         /* activities */
         addActivity: (activityObj) => dispatch(addActivity(activityObj)),
         /* totals */
-        updateTotals: (dist, dur, type) => dispatch(updateTotals(dist, dur, type)),
+        updateTotals: (uType, dist, dur, aType) => dispatch(updateTotals(uType,dist, dur, aType)),
         /* rewards */
         toggleEarned: (name, id) => dispatch(toggleEarned(name, id)),
         personalBest: (name, id, stat) => dispatch(personalBest(name, id, stat))

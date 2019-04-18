@@ -13,21 +13,6 @@ class MapCard extends Component {
     constructor(props) {
         super(props);
 
-        if (this.props.type === 'end') {
-            this.routeCoordinates = this.props.currentActivity.routeCoordinates;
-            this.activeCoordinates = [];
-            this.inActiveCoordinates = [];
-
-            this.routeCoordinates.forEach((coord) => {
-                if (coord.active) {
-                    this.activeCoordinates.concat([coord]);
-                }
-                else {
-                    this.inActiveCoordinates.concat([coord]);
-                }
-            });
-        }
-
         
         this.state = {
             region: {
@@ -55,6 +40,7 @@ class MapCard extends Component {
                         },
                         positionLoading: false
                     });
+                    this.props.updated();
                 },
                 (error) => console.log("Error:", error),
                 { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 5 },
@@ -173,7 +159,7 @@ class MapCard extends Component {
                             strokeColor={'#2541B2'}
                         />
                         <Marker
-                            coordinate={this.routeCoordinates[0]}
+                            coordinate={this.props.currentActivity.routeCoordinates[0]}
                             pinColor={'green'}
                         >
                             <Callout>
@@ -183,7 +169,7 @@ class MapCard extends Component {
                             </Callout>
                         </Marker>
                         <Marker
-                            coordinate={this.routeCoordinates[this.routeCoordinates.length - 1]}
+                            coordinate={this.props.currentActivity.routeCoordinates[this.props.currentActivity.routeCoordinates.length - 1]}
                             pinColor={'red'}
                         >
                             <Callout>
