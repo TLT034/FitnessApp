@@ -28,21 +28,11 @@ class HomeScreen extends Component {
         this.state = {
             active: false,
             latitude: 0,
-            longitude: 0
+            longitude: 0,
         }
     }
 
     componentDidMount() {
-        PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        );
-        PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-        );
-        PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
-        );
-
         this._loadSavedData();
     }
 
@@ -113,6 +103,7 @@ class HomeScreen extends Component {
             .catch(error => console.log("No saved rewards",error));
     }
 }
+
 
 function mapDispatchToProps(dispatch) {
     return {

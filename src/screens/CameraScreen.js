@@ -39,11 +39,11 @@ class CameraScreen extends Component {
                     flashMode={RNCamera.Constants.FlashMode.auto}
                 />
                 <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-                    <TouchableOpacity onPress={() => this.takePicture()} style={styles.capture}>
-                        <Text style={{ fontSize: 14 }}> SNAP </Text>
-                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this._flipCamera()} style={styles.capture}>
                         <MaterialIcon name={'camera-party-mode'} size={35} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.takePicture()} style={styles.capture}>
+                        <Text style={{ fontSize: 14 }}> SNAP </Text>
                     </TouchableOpacity>
                 </View>
             </View>

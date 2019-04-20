@@ -8,6 +8,7 @@ import { NavigationEvents } from 'react-navigation';
 import { deleteActivity } from '../redux/actions/activityActions';
 import { clearActivity } from '../redux/actions/currentActivityActions';
 import { updateTotals } from '../redux/actions/totalActions';
+import { toggleEarned, personalBest } from '../redux/actions/rewardActions';
 
 import WeatherCard from '../components/WeatherCard';
 import MapCard from '../components/MapCard';
@@ -16,6 +17,13 @@ import navigationService from '../services/NavigationService';
 class IndividualActivityScreen extends Component {
     static navigationOptions = {
         title: 'Activity'
+    }
+
+    constructor(props) {
+        super(props);
+
+        const { navigation } = this.props;
+        this.canDelete = navigation.getParam('canDelete', true);
     }
 
     render() {
@@ -65,11 +73,12 @@ class IndividualActivityScreen extends Component {
                     <Card style={{ height: 50, margin: 0, padding: 0 }}>
                         <CardItem style={{ height: 40, margin: 0, padding: 0, justifyContent: 'space-evenly', alignItems: 'center'  }}>
                             <Button
+                                disabled={!this.canDelete}
                                 style={{ height: 40, alignSelf: 'center' }}
                                 transparent
                                 onPress={() => this._deleteActivity()}
                             >
-                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'red' }}>Delete Activity</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: this.canDelete ? 'red':'gray' }}>Delete Activity</Text>
                             </Button>
                             <Button
                                 style={{ height: 40, alignSelf: 'center' }}
@@ -140,11 +149,165 @@ class IndividualActivityScreen extends Component {
         );
     }
 
+    _checkToRemoveRewards() {
+        /******************************* Check for Level Down ******************************/
+        for (let i = 10; i >= 1; i--) {
+            // if this completed activity is number 4,9,14,...,49. Level Down.
+            if (this.props.activities.length === (i * 5) - 1) {
+                let newLvlName = "Level " + (i + 1).toString();
+                this.props.toggleEarned(newLvlName, null, false);
+            }
+        }
+
+        /*************************** Check activities and save best stats ******************************/
+        let duration = 0;
+        let durId;
+        let distance = 0;
+        let distId;
+        let pace = 0;
+        let paceId;
+        let achievementPace = 0;
+        let achievementPaceId;
+        let activityIds = [];
+
+        this.props.activities.forEach((activity) => {
+            if (activity.duration > duration) {
+                duration = activity.duration;
+                durId = activity.id;
+            }
+            if (activity.distance > distance) {
+                distance = activity.distance;
+                distId = activity.id;
+            }
+            if (activity.pace > pace && activity.distance >= 0.25) {
+                pace = activity.pace;
+                paceId = activity.id;
+            }
+            if (activity.pace > achievementPace && activity.distance >= 1) {
+                achievementPace = activity.pace;
+                achievementPaceId = activity.id;
+            }
+            activityIds.push(activity.id);
+        });
+
+        /**************************** Check for RESET of Personal Best *****************************/
+        // Update personal best rewards to the correct stat and activity Id.
+        // If there are no activities over 0 in a stat, then reset the personal bests
+        // to not yet earned.
+        this.props.rewards.forEach((reward) => {
+            switch (reward.name) {
+                case 'Duration':
+                    if (distance > 0) {
+                        this.props.personalBest(
+                            'Duration',
+                            durId,
+                            duration,
+                            true
+                        );
+                    }
+                    else {
+                        this.props.personalBest(
+                            'Duration',
+                            null,
+                            0,
+                            false
+                        );
+                    }
+                    break;
+                case 'Distance':
+                    if (duration > 0) {
+                        this.props.personalBest(
+                            'Distance',
+                            distId,
+                            distance,
+                            true
+                        );
+                    }
+                    else {
+                        this.props.personalBest(
+                            'Distance',
+                            null,
+                            0,
+                            false
+                        );
+                    }
+                    break;
+                case 'Pace':
+                    if (pace > 0) {
+                        this.props.personalBest(
+                            'Pace',
+                            paceId,
+                            pace,
+                            true
+                        );
+                    }
+                    else {
+                        this.props.personalBest(
+                            'Pace',
+                            null,
+                            0,
+                            false
+                        );
+                    }
+                    break;
+            }
+        });
+
+        /***************************** Check to REMOVE Achievements *********************************/
+        this.props.rewards.forEach((reward) => {
+            if (reward.earned) {
+                switch (reward.name) {
+                    case 'Speedy':
+                        if (achievementPace < 8) {
+                            this.props.toggleEarned('Speedy', null, false);
+                        }
+                        else if (!activityIds.includes(reward.activityId)) {
+                            this.props.toggleEarned('Speedy', achievementPaceId, true);
+                        }
+                        break;
+                    case 'The Flash':
+                        if (achievementPace < 9) {
+                            this.props.toggleEarned('The Flash', null, false);
+                        }
+                        else if (!activityIds.includes(reward.activityId)) {
+                            this.props.toggleEarned('The Flash', achievementPaceId, true);
+                        }
+                        break;
+                    case 'Getting There':
+                        if (this.props.totals.distance < 10) {
+                            this.props.toggleEarned('Getting There', null, false);
+                        }
+                        else if (!activityIds.includes(reward.activityId)) {
+                            this.props.toggleEarned('Getting There', achievementPaceId, true);
+                        }
+                        break;
+                    case 'Going Places':
+                        if (this.props.totals.distance < 50) {
+                            this.props.toggleEarned('Going Places', null, false);
+                        }
+                        else if (!activityIds.includes(reward.activityId)) {
+                            this.props.toggleEarned('Going Places', achievementPaceId, true);
+                        }
+                        break;
+                    case 'Pioneer':
+                        if (this.props.totals.distance < 100) {
+                            this.props.toggleEarned('Pioneer', null, false);
+                        }
+                        else if (!activityIds.includes(reward.activityId)) {
+                            this.props.toggleEarned('Pioneer', achievementPaceId, true);
+                        }
+                        break;
+                }
+            }
+        });
+    }
+
     componentDidUpdate(prevProps) {
 
         if (prevProps.totals !== this.props.totals) {
+            this._checkToRemoveRewards();
             this.props.clearActivity();
-            navigationService.navigate('Activities');
+            navigationService.goBack();
         }
     }
 }
@@ -153,7 +316,9 @@ function mapDispatchToProps(dispatch) {
     return {
         deleteActivity: (id) => dispatch(deleteActivity(id)),
         clearActivity: () => dispatch(clearActivity()),
-        updateTotals: (uType, dist, dur, aType) => dispatch(updateTotals(uType,dist,dur,aType))
+        updateTotals: (uType, dist, dur, aType) => dispatch(updateTotals(uType, dist, dur, aType)),
+        toggleEarned: (name, id, earned) => dispatch(toggleEarned(name, id, earned)),
+        personalBest: (name, id, stat, earned) => dispatch(personalBest(name, id, stat, earned))
     };
 }
 
@@ -161,7 +326,8 @@ function mapStateToProps(state) {
     return {
         currentActivity: state.currentActivity,
         activities: state.activities,
-        totals: state.totals
+        totals: state.totals,
+        rewards: state.rewards
     }
 }
 

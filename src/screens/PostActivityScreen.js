@@ -140,7 +140,7 @@ class PostActivityScreen extends Component {
     }
 
     _checkForRewards() {
-        // current activity
+        // current activity - can't use currentActivity prop/global state bc it may be deleted by now.
         let currActivity = this.props.activities[this.props.activities.length - 1];
 
         /******************************* Check for Level Up ******************************/
@@ -150,21 +150,22 @@ class PostActivityScreen extends Component {
                 let newLvlName = "Level " + (i + 1).toString();
                 let activityId = currActivity.id;
                 console.log(`Level Up! - ${newLvlName}`);
-                this.props.toggleEarned(newLvlName, activityId);
+                this.props.toggleEarned(newLvlName, activityId, true);
             }
         }
 
         /**************************** Check for Personal Best *****************************/
 
         // find current personal bests
-        this.props.rewards.map((reward) => {
+        this.props.rewards.forEach((reward) => {
             switch (reward.name) {
                 case 'Duration':
                     if (currActivity.duration > reward.stat) {
                         this.props.personalBest(
                             'Duration',
                             currActivity.id,
-                            currActivity.duration
+                            currActivity.duration,
+                            true
                         );
                     }
                     break;
@@ -173,7 +174,8 @@ class PostActivityScreen extends Component {
                         this.props.personalBest(
                             'Distance',
                             currActivity.id,
-                            currActivity.distance
+                            currActivity.distance,
+                            true
                         );
                     }
                     break;
@@ -182,7 +184,8 @@ class PostActivityScreen extends Component {
                         this.props.personalBest(
                             'Pace',
                             currActivity.id,
-                            currActivity.pace
+                            currActivity.pace,
+                            true
                         );
                     }
                     break;
@@ -190,32 +193,32 @@ class PostActivityScreen extends Component {
         });
 
         /***************************** Check for Achievements *********************************/
-        this.props.rewards.map((reward) => {
+        this.props.rewards.forEach((reward) => {
             if (!reward.earned) {
                 switch (reward.name) {
                     case 'Speedy':
                         if (currActivity.pace >= 8 && currActivity.distance >= 1) {
-                            this.props.toggleEarned('Speedy', currActivity.id);
+                            this.props.toggleEarned('Speedy', currActivity.id, true);
                         }
                         break;
                     case 'The Flash':
                         if (currActivity.pace >= 9 && currActivity.distance >= 1) {
-                            this.props.toggleEarned('The Flash', currActivity.id);
+                            this.props.toggleEarned('The Flash', currActivity.id, true);
                         }
                         break;
                     case 'Getting There':
                         if (this.props.totals.distance >= 10) {
-                            this.props.toggleEarned('Getting There', currActivity.id);
+                            this.props.toggleEarned('Getting There', currActivity.id, true);
                         }
                         break;
                     case 'Going Places':
                         if (this.props.totals.distance >= 50) {
-                            this.props.toggleEarned('Going Places', currActivity.id);
+                            this.props.toggleEarned('Going Places', currActivity.id, true);
                         }
                         break;
                     case 'Pioneer':
                         if (this.props.totals.distance >= 100) {
-                            this.props.toggleEarned('Pioneer', currActivity.id);
+                            this.props.toggleEarned('Pioneer', currActivity.id, true);
                         }
                         break;
                 }
@@ -251,8 +254,8 @@ function mapDispatchToProps(dispatch) {
         /* totals */
         updateTotals: (uType, dist, dur, aType) => dispatch(updateTotals(uType,dist, dur, aType)),
         /* rewards */
-        toggleEarned: (name, id) => dispatch(toggleEarned(name, id)),
-        personalBest: (name, id, stat) => dispatch(personalBest(name, id, stat))
+        toggleEarned: (name, id, earned) => dispatch(toggleEarned(name, id, earned)),
+        personalBest: (name, id, stat, earned) => dispatch(personalBest(name, id, stat, earned))
     };
 }
 

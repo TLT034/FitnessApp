@@ -161,9 +161,14 @@ class DuringActivityScreen extends Component {
     }
 
     _endActivity() {
+        // prevent 0/0 error
+        let time = 1;
+        if (this.state.time >= time) {
+            time = this.state.time;
+        }
 
         navigator.geolocation.clearWatch(this.gpsID);
-        this.props.addStats(this.state.time, this.state.distance, (this.state.distance / (this.state.time / 3600)))
+        this.props.addStats(this.state.time, this.state.distance, (this.state.distance / (time / 3600)))
         this.props.addRouteCoords(this.state.routeCoordinates);
         BackgroundTimer.clearInterval(this.timer);
         navigationService.navigate('PostActivity');

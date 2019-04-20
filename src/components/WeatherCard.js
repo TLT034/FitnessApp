@@ -3,6 +3,7 @@ import { Card, CardItem, Text, Body, Left, Thumbnail, Button, View, Spinner } fr
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
+import { PermissionsAndroid, Alert } from 'react-native';
 
 import { addStartWeather, addEndWeather } from '../redux/actions/currentActivityActions';
 
@@ -17,31 +18,56 @@ class WeatherCard extends Component {
             loading: true,
             latitude: 0,
             longitude: 0,
-            weather: {}
+            weather: {},
         }
     }
 
     componentDidMount() {
-        
+
         if (this.props.type === 'loadStart') {
             this.setState({ weather: this.props.startWeather })
         }
         else if (this.props.type === 'loadEnd') {
-            this.setState({weather: this.props.endWeather})
+            this.setState({ weather: this.props.endWeather })
         }
         else {
             this.setState({ loading: true });
-            this.gpsID = navigator.geolocation.watchPosition(
-                (position) => {
 
-                    this.setState({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    }, () => this._loadWeatherInfo());
-                },
-                (error) => console.log("Error:", error),
-                { enableHighAccuracy: true, timeout: 100000, maximumAge: 1000, distanceFilter: 10000 },
-            );
+            PermissionsAndroid.requestMultiple(
+                [
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+                ]
+            ).then((result) => {
+                if (result['android.permission.ACCESS_FINE_LOCATION']
+                    && result['android.permission.READ_EXTERNAL_STORAGE']
+                    && result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
+
+                    this.gpsID = navigator.geolocation.watchPosition(
+                        (position) => {
+
+                            this.setState({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            }, () => this._loadWeatherInfo());
+                        },
+                        (error) => {
+                            console.log("Error:", error)
+                            navigator.geolocation.clearWatch(this.gpsID);
+                        },
+                        { enableHighAccuracy: true, timeout: 100000, maximumAge: 1000, distanceFilter: 10000 },
+                    );
+                }
+                else {
+                    Alert.alert(
+                        'Permissions Required',
+                        'Refresh app and allow permissions or Go into Settings ->' +
+                        ' Applications -> APP_NAME -> Permissions and Allow permissions to use app',
+                        [{ text: 'Okay', style: 'default' }]
+                    );
+                }
+            });
         }
     }
 

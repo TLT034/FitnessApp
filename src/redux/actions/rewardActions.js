@@ -11,17 +11,19 @@ export {
 };
 
 
-export const toggleEarned = (name, id) => ({
+export const toggleEarned = (name, id, earned) => ({
     type: TOGGLE_EARNED,
     name: name,
-    id: id
+    id: id,
+    earned: earned
 })
 
-export const personalBest = (name, id, stat) => ({
+export const personalBest = (name, id, stat, earned) => ({
     type: PERSONAL_BEST,
     name: name,
     id: id,
-    stat: stat
+    stat: stat,
+    earned: earned
 })
 
 export const filterRewards = (rewards, type) => ({

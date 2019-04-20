@@ -25,14 +25,13 @@ class IndividualRewardScreen extends Component {
                 this.reward = reward;
             }
         })
-        console.log(this.reward);
+
         this.activity = null;
         this.props.activities.forEach((activity) => {
             if (this.reward.activityId === activity.id) {
                 this.activity = activity;
             }
         })
-        console.log(this.activity);
     }
 
     render() {
@@ -60,7 +59,7 @@ class IndividualRewardScreen extends Component {
                                 transparent
                                 onPress={() => {
                                     this.props.clearActivity();
-                                    navigationService.goBack();
+                                    navigationService.navigate('Rewards');
                                 }}
                             >
                                 <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#2541B2' }}>Done</Text>
@@ -121,7 +120,7 @@ class IndividualRewardScreen extends Component {
                     button
                     onPress={() => {
                         this.props.setActivity(this.activity);
-                        navigationService.navigate('IndividualActivity')
+                        navigationService.navigate('IndividualActivity', {canDelete: false});
                     }}>
                     <Left>
                         <Button style={{ backgroundColor: iconColor }}>

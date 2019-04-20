@@ -14,10 +14,11 @@ const rewards = (state = initialState, action) => {
                 (reward.name === action.name) ?
                     {
                         ...reward,
-                        earned: true,
+                        earned: action.earned,
                         activityId: action.id
                     } : reward);
 
+            // make state an object from array for async storage
             stateObj = newState.reduce((obj, item) => {
                 obj[item.name] = item;
                 return obj;
@@ -39,11 +40,12 @@ const rewards = (state = initialState, action) => {
                 (reward.name === action.name) ?
                     {
                         ...reward,
-                        earned: true,
+                        earned: action.earned,
                         activityId: action.id,
                         stat: action.stat
                     } : reward);
 
+            // make state an object from array for async storage
             stateObj = newState.reduce((obj, item) => {
                 obj[item.name] = item;
                 return obj;
