@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Alert } from 'react-native';
+import { Image, Alert, View } from 'react-native';
 import { Card, CardItem, Container, Header, Content, ListItem, CheckBox, Text, Body, List, Separator, Button, Icon, Left, Right, Thumbnail } from 'native-base';
 import { connect } from 'react-redux';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -66,9 +66,13 @@ class IndividualActivityScreen extends Component {
                         <CardItem style={{ justifyContent: 'center' }}>
                             {this._renderImage()}
                         </CardItem>
-                        <CardItem>
-                            <Text>How you felt: {this.props.currentActivity.feeling}</Text>
+                        <CardItem style={{justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', flexDirection: 'column'}}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 20}}>Post Activity Feeling</Text>
+                            <Text>{this.props.currentActivity.feeling}</Text>
                         </CardItem>
+                    </Card>
+                    <Card>
+                        {this._renderReward()}
                     </Card>
                     <Card style={{ height: 50, margin: 0, padding: 0 }}>
                         <CardItem style={{ height: 40, margin: 0, padding: 0, justifyContent: 'space-evenly', alignItems: 'center'  }}>
@@ -124,6 +128,57 @@ class IndividualActivityScreen extends Component {
                 />
             );
         }
+    }
+
+    _renderReward() {
+        let earnedRewards = [];
+        this.props.rewards.forEach((reward) => {
+            if (reward.activityId === this.props.currentActivity.id) {
+                let iconName;
+                let typeText;
+                switch (reward.type) {
+                    case 'Level':
+                        iconName = 'trophy';
+                        typeText = 'Up!';
+                        break;
+                    case 'Personal':
+                        iconName = 'account-star';
+                        typeText = 'Best!';
+                        break;
+                    case 'Achievement':
+                        iconName = 'trophy-award';
+                        typeText = '';
+                        break;
+                } 
+
+                earnedRewards.push(
+                    <View key={reward.name}
+                        style={{ justifyContent: 'center', alignItems: 'center', paddingHorizontal: 10 }}
+                    >
+                        <MaterialIcon size={100} name={iconName} color={'gold'} />
+                        <Text style={{ alignSelf: 'center' }}>{reward.type} {typeText}</Text>
+                        <Text style={{ alignSelf: 'center' }}>{reward.name}</Text>
+                    </View>
+                );
+            }
+        });
+
+        if (earnedRewards.length > 0) {
+            return (
+                <CardItem
+                    style={{ justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}
+                >
+                    {earnedRewards}
+                </CardItem>
+            );
+        }
+        else return (
+                <CardItem
+                style={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}
+                >
+                <Text style={{fontSize: 20, fontWeight: 'bold'}}>No Rewards Earned On This Activity</Text>
+                </CardItem>
+            );
     }
 
     _deleteActivity() {
