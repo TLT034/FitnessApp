@@ -3,6 +3,7 @@ package com.thomastristanfinalprojectandroid;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import org.reactnative.camera.RNCameraPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNLocalNotificationsPackage(),
             new ReactNativePushNotificationPackage(),
             new BackgroundTimerPackage(),
             new RNCameraPackage(),

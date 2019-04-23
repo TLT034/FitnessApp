@@ -139,6 +139,9 @@ android {
 }
 
 dependencies {
+	implementation 'com.google.android.gms:play-services-gcm:+'
+
+    implementation project(':react-native-local-notifications')
     implementation project(':react-native-push-notification')
     implementation project(':react-native-background-timer')
     implementation project(':react-native-camera')

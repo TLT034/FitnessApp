@@ -15,14 +15,7 @@ const activities = (state = [], action) => {
                 {
                     id: activityId,
                     ...action.activity
-                })
-                .then(() => dataController.getStorageItem('activities'))
-                .then(result => {
-                    console.log(`Activity ${activityId} Saved!`);
-                    console.log(result);
-                })
-                .catch(error => console.error('Add Activity Error:', error)
-            );
+                });
             /**************************************************************************************/
 
             return [
@@ -51,14 +44,7 @@ const activities = (state = [], action) => {
                     updatedActivities[activity.id] = activity;
                 })
 
-                dataController.updateStorageItem('activities', updatedActivities)
-                    .then(() => dataController.getStorageItem('activities'))
-                    .then(result => {
-                        console.log(`activities updated!`);
-                        console.log(result);
-                    })
-                    .catch(error => console.error('Add Activity Error:', error)
-                );
+                dataController.updateStorageItem('activities', updatedActivities);
             }
             /***************************************************************************************/
 

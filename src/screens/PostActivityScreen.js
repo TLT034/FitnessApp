@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Image, Alert } from 'react-native'; 
 import { Card, CardItem, Container, Content, Text, Button, Form, Input, Label, Item } from 'native-base';
 import { connect } from 'react-redux';
+import NotificationService from '../services/NotificationService';
 
 import { clearActivity, addFeeling } from '../redux/actions/currentActivityActions';
 import { addActivity } from '../redux/actions/activityActions';
@@ -18,6 +19,11 @@ class PostActivityScreen extends Component {
         title: 'Activity Report'
     }
 
+    constructor(props) {
+        super(props);
+
+        this.notificationService = new NotificationService();
+    }
 
     render() {
         return (
@@ -118,6 +124,15 @@ class PostActivityScreen extends Component {
     }
 
     _saveActivity() {
+        this.notificationService.activityNotification(
+            "Activity Complete!",
+            `Your ${this.props.currentActivity.type} has been saved`,
+            `Your ${this.props.currentActivity.type} has been saved\n` +
+            `Duration: ${this._formatTime()}\n` +
+            `Distance: ${this.props.currentActivity.distance.toFixed(3)} miles\n` +
+            `Pace: ${this.props.currentActivity.pace.toFixed(2)} mph`,
+            '#03256C'
+        );
         this.props.addActivity(this.props.currentActivity);
     }
 
@@ -138,6 +153,7 @@ class PostActivityScreen extends Component {
             ]
         );
     }
+
 
     _checkForRewards() {
         // current activity - can't use currentActivity prop/global state bc it may be deleted by now.

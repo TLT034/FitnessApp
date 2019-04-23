@@ -48,13 +48,7 @@ const totals = (state = initialState, action) => {
                     break;
             }
 
-            dataController.updateStorageItem('totals', newState)
-                .then(() => dataController.getStorageItem('totals'))
-                .then(result => {
-                    console.log(`totals updated!`);
-                    console.log(result);
-                })
-                .catch(error => console.error('Add Activity Error:', error));
+            dataController.updateStorageItem('totals', newState);
 
             return newState;
 

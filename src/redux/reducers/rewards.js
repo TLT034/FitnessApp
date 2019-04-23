@@ -24,13 +24,7 @@ const rewards = (state = initialState, action) => {
                 return obj;
             }, {});
 
-            dataController.updateStorageItem('rewards', stateObj)
-                .then(() => dataController.getStorageItem('rewards'))
-                .then(result => {
-                    console.log(`${action.name} Earned!`);
-                    console.log(result);
-                })
-                .catch(error => console.error('Reward Toggle', error));
+            dataController.updateStorageItem('rewards', stateObj);
 
             return newState;
 
@@ -51,13 +45,7 @@ const rewards = (state = initialState, action) => {
                 return obj;
             }, {});
 
-            dataController.updateStorageItem('rewards', stateObj)
-                .then(() => dataController.getStorageItem('rewards'))
-                .then(result => {
-                    console.log(`${action.name} Earned!`);
-                    console.log(result);
-                })
-                .catch(error => console.error('Personal Best', error));
+            dataController.updateStorageItem('rewards', stateObj);
 
             return newState;
 
