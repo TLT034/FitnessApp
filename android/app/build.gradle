@@ -139,6 +139,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-fetch-blob')
+    implementation project(':react-native-share')
 	implementation 'com.google.android.gms:play-services-gcm:+'
 
     implementation project(':react-native-local-notifications')

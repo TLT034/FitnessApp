@@ -1,4 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest 
+  xmlns:android="http://schemas.android.com/apk/res/android"   
+  xmlns:tools="http://schemas.android.com/tools"
   package="com.thomastristanfinalprojectandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -18,13 +20,6 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
-    <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_name"
-                android:value="Activity Notifications"/>
-    <meta-data  android:name="com.dieam.reactnativepushnotification.notification_channel_description"
-                android:value="Notify when activity is saved."/>
-    <!-- Change the resource name to your App's accent color - or any other color you want -->
-    <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
-                android:resource="@android:color/white"/>
 
     <activity
     android:name=".SplashActivity"
@@ -44,26 +39,49 @@
       android:exported="true" >
     </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-    
+
+    <!--Google Maps-->
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDz4-FZAKBJocNVyZpLwhmwARjPPyu_XeI"/>
 
-    <service
-            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm"
-            android:exported="false" >
-      <intent-filter>
-        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-      </intent-filter>
-    </service>
-
+    <!--Push Notifications Start-->
+      <meta-data  
+        android:name="com.dieam.reactnativepushnotification.notification_channel_name"
+        android:value="Activity Notifications"/>
+      <meta-data  
+        android:name="com.dieam.reactnativepushnotification.notification_channel_description"
+        android:value="Notify when activity is saved."/>
+      <meta-data  
+        android:name="com.dieam.reactnativepushnotification.notification_color"
+        android:resource="@android:color/white"/>
+      <service
+              android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerServiceGcm"
+              android:exported="false" >
+        <intent-filter>
+          <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        </intent-filter>
+      </service>
       <service
         android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
         android:exported="false" >
         <intent-filter>
           <action android:name="com.google.firebase.MESSAGING_EVENT" />
         </intent-filter>
-      </service>   
+      </service>
+    <!--Push Notifications End-->
+
+    <!--Social Sharing-->
+    <provider
+          android:name="android.support.v4.content.FileProvider"
+          android:authorities="com.thomastristanfinalprojectandroid.provider"
+          android:grantUriPermissions="true"
+          android:exported="false">
+        <meta-data
+          tools:replace="android:resource"
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/filepaths" />
+      </provider>
     
     </application>
 

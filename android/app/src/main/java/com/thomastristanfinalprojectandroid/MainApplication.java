@@ -3,6 +3,9 @@ package com.thomastristanfinalprojectandroid;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import cl.json.RNSharePackage;
+import cl.json.ShareApplication;
 import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
@@ -18,7 +21,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ShareApplication, ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -30,6 +33,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new RNSharePackage(),
             new RNLocalNotificationsPackage(),
             new ReactNativePushNotificationPackage(),
             new BackgroundTimerPackage(),
@@ -56,4 +61,11 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
   }
+
+
+  @Override
+  public String getFileProviderAuthority() {
+    return "com.thomastristanfinalprojectandroid.provider";
+  }
+
 }

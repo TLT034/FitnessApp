@@ -3,6 +3,8 @@ import { View, StyleSheet, Image, Alert } from 'react-native';
 import { Card, CardItem, Container, Content, Text, Button, Form, Input, Label, Item } from 'native-base';
 import { connect } from 'react-redux';
 import NotificationService from '../services/NotificationService';
+import Share from 'react-native-share';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 import { clearActivity, addFeeling } from '../redux/actions/currentActivityActions';
 import { addActivity } from '../redux/actions/activityActions';
@@ -21,6 +23,10 @@ class PostActivityScreen extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            shareActive: false
+        }
 
         this.notificationService = new NotificationService();
     }
@@ -72,14 +78,21 @@ class PostActivityScreen extends Component {
                                 transparent
                                 onPress={() => this._deleteActivity()}
                             >
-                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'red' }}>Delete Activity</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'red' }}>Delete</Text>
+                            </Button>
+                            <Button
+                                style={{ height: 40, alignSelf: 'center' }}
+                                transparent
+                                onPress={() => this._openShare()}
+                            >
+                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#2541B2' }}>Share</Text>
                             </Button>
                             <Button
                                 style={{ height: 40, alignSelf: 'center' }}
                                 transparent
                                 onPress={() => this._saveActivity()}
                             >
-                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#2541B2' }}>Save Activity</Text>
+                                <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#2541B2' }}>Save</Text>
                             </Button>
                         </CardItem>
                     </Card>
@@ -109,6 +122,27 @@ class PostActivityScreen extends Component {
                 />
             );
         }
+    }
+
+    _openShare() {
+
+        RNFetchBlob.fs.readFile(this.props.currentActivity.imgPath, 'base64')
+            .then((data) => {
+                const IMAGE = 'data:image/png;base64,' + data;
+
+                Share.open({
+                    title: `Share Your ${this.props.currentActivity.type}`,
+                    message: `Check out my ${this.props.currentActivity.type}!\n\n` +
+                        `Duration: ${this._formatTime()}\n` +
+                        `Distance: ${this.props.currentActivity.distance.toFixed(3)} miles\n` +
+                        `Pace: ${this.props.currentActivity.pace.toFixed(2)} mph\n\n` +
+                        `After this ${this.props.currentActivity.type} I felt ${this.props.currentActivity.feeling}!`,
+                    url: IMAGE,
+                    subject: 'Check out my Activity',
+            
+                });
+            })
+
     }
 
     _formatTime() {
