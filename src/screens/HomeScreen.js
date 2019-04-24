@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Text, Button, Fab } from 'native-base';
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 
@@ -34,6 +34,7 @@ class HomeScreen extends Component {
 
     componentDidMount() {
         this._loadSavedData();
+        this._bonusAlert();
     }
 
     render() {
@@ -101,6 +102,17 @@ class HomeScreen extends Component {
                 this.props.loadRewards(result);
             })
             .catch(error => console.log("No saved rewards",error));
+    }
+
+    _bonusAlert() {
+        Alert.alert(
+            'Bonus Features | Extra Credit',
+            '(15pts) Notifications (react-native-push-notifications): Sends notification when you complete and activity.\n\n' +
+            '(15pts) Social Sharing (react-native-share): Button at end of activity to share your activity through any social apps you have installed.\n\n' +
+            '(10pts) Stats: Stats Info on homescreen that shows your total distance, duration, runs, hikes, and bikes.\n\n' +
+            '(5pts) Home Weather: Weather info on homescreen with refresh button and custom loading animation.\n\n' +
+            '(5pts) Recent Rewards: Homescreen shows your 3 most recently earned rewards.'
+        );
     }
 }
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Card, CardItem, Text, Body, Content, View, Button } from 'native-base';
 import { connect } from 'react-redux';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { addActivityType } from '../redux/actions/currentActivityActions';
-
-import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import styles from '../styles/ASelectStyles';
 
 class ActivitySelectCard extends Component {
 
@@ -13,15 +13,15 @@ class ActivitySelectCard extends Component {
         return (
             <Card>
                 <CardItem style={{ flexDirection: 'column' }}>
-                    <View style={{ paddingBottom: 5, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20 }}>Activity Type</Text>
+                    <View style={styles.header}>
+                        <Text style={styles.headerFont}>Activity Type</Text>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%' }} >
+                    <View style={styles.selectContainer} >
                         <Button
                             style={{
                                 backgroundColor: this.props.currentActivity.type === 'Run' ?
                                     '#06BEE1' : 'lightgray',
-                                margin: 5, height: 75, width: 75, justifyContent: 'center'
+                                ...styles.activity
                             }}
                             onPress={() => this.props.addActivityType('Run')}
                         >
@@ -31,7 +31,7 @@ class ActivitySelectCard extends Component {
                             style={{
                                 backgroundColor: this.props.currentActivity.type === 'Bike' ?
                                     '#1768AC' : 'lightgray',
-                                margin: 5, height: 75, width: 75, justifyContent: 'center'
+                                ...styles.activity
                             }}
                             onPress={() => this.props.addActivityType('Bike')}
                         >
@@ -41,7 +41,7 @@ class ActivitySelectCard extends Component {
                             style={{
                                 backgroundColor: this.props.currentActivity.type === 'Hike' ?
                                     '#2541B2' : 'lightgray',
-                                margin: 5, height: 75, width: 75, justifyContent: 'center'
+                                ...styles.activity
                             }}
                             onPress={() => this.props.addActivityType('Hike')}
                         >
