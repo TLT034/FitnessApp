@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\android",
     "\\android\\app",
-    "\\android\\app\\src",
     "\\android\\app\\src\\main",
     "\\android\\app\\src\\main\\java",
     "\\android\\app\\src\\main\\java\\com",
+    "\\android\\app\\src\\main\\java\\com\\thomastristanfinalprojectandroid",
     "\\android\\app\\src\\main\\res",
-    "\\README",
-    "\\src",
+    "\\android\\gradle\\wrapper",
     "\\src\\screens"
   ],
-  "SelectedNode": "\\README\\Cognitive Walkthrough",
+  "SelectedNode": "\\android\\app\\build.gradle",
   "PreviewInSolutionExplorer": false
 }

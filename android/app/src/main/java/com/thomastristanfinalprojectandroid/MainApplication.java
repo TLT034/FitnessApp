@@ -6,7 +6,6 @@ import com.facebook.react.ReactApplication;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import cl.json.RNSharePackage;
 import cl.json.ShareApplication;
-import com.github.wumke.RNLocalNotifications.RNLocalNotificationsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
 import org.reactnative.camera.RNCameraPackage;
@@ -35,7 +34,6 @@ public class MainApplication extends Application implements ShareApplication, Re
           new MainReactPackage(),
             new RNFetchBlobPackage(),
             new RNSharePackage(),
-            new RNLocalNotificationsPackage(),
             new ReactNativePushNotificationPackage(),
             new BackgroundTimerPackage(),
             new RNCameraPackage(),

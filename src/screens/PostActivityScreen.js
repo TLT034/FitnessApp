@@ -4,7 +4,7 @@ import { Card, CardItem, Container, Content, Text, Button, Form, Input, Label, I
 import { connect } from 'react-redux';
 import NotificationService from '../services/NotificationService';
 import Share from 'react-native-share';
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import { clearActivity, addFeeling } from '../redux/actions/currentActivityActions';
 import { addActivity } from '../redux/actions/activityActions';
@@ -125,7 +125,6 @@ class PostActivityScreen extends Component {
     }
 
     _openShare() {
-
         RNFetchBlob.fs.readFile(this.props.currentActivity.imgPath, 'base64')
             .then((data) => {
                 const IMAGE = 'data:image/png;base64,' + data;
