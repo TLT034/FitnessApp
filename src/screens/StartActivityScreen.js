@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-import { Container, Content, Text, Button, View, Card, CardItem } from 'native-base';
-import { connect } from 'react-redux';
+import { Container, Content, Text, Button, Card, CardItem } from 'native-base';
 
 import MapCard from '../components/MapCard';
 import WeatherCard from '../components/WeatherCard';

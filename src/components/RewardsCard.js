@@ -20,6 +20,7 @@ class RewardsCard extends Component {
         );
     }
 
+    /** Renders the three most recently earned rewards */
     _renderRewards() {
         let earnedRewards = [];
         this.props.rewards.forEach((reward) => {
@@ -28,6 +29,7 @@ class RewardsCard extends Component {
             }
         })
 
+        // three most recently earned rewards
         let recentRewards = earnedRewards.slice(Math.max(earnedRewards.length - 3, 0));
 
         let rewardComponents = [];

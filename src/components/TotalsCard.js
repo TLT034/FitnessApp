@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Card, CardItem, Text, Body, Content, View, } from 'native-base';
+import { Card, CardItem, Text, View, } from 'native-base';
 import { connect } from 'react-redux';
 
 
 class TotalsCard extends Component {
 
+    /** Card that shows the users totals (ex. Total Distance Traveled, Total Number of Runs, etc.) */
     render() {
         
         return (

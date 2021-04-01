@@ -126,6 +126,7 @@ class RewardScreen extends Component {
         }
     }
 
+    /** Renders a list of rewards based on filters. Navigates to reward detail when reward is clicked */
     _renderRewards() {
         let rewards = [];
 

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { CameraRoll, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CameraRoll, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { PermissionsAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 

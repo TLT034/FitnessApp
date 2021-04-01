@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Card, CardItem, Text, Body, Left, Thumbnail, Button, View, Spinner } from 'native-base';
+import { Card, CardItem, Text, Thumbnail, Button, View, Spinner } from 'native-base';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import { NavigationEvents } from 'react-navigation';
 import { PermissionsAndroid, Alert } from 'react-native';
 
 import { addStartWeather, addEndWeather } from '../redux/actions/currentActivityActions';
@@ -23,7 +22,8 @@ class WeatherCard extends Component {
     }
 
     componentDidMount() {
-
+        // If loading weather data from previous activity, gather info from local storage
+        // otherwise, retrieve weather from api
         if (this.props.type === 'loadStart') {
             this.setState({ weather: this.props.startWeather })
         }
@@ -33,6 +33,7 @@ class WeatherCard extends Component {
         else {
             this.setState({ loading: true });
 
+            /** Need permission to gather data based on user location */
             PermissionsAndroid.requestMultiple(
                 [
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -40,8 +41,8 @@ class WeatherCard extends Component {
                     PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
                 ]
             ).then((result) => {
-                if (result['android.permission.ACCESS_FINE_LOCATION']
-                    && result['android.permission.READ_EXTERNAL_STORAGE']
+                if (result['android.permission.ACCESS_FINE_LOCATION'] === 'granted'
+                    && result['android.permission.READ_EXTERNAL_STORAGE'] === 'granted'
                     && result['android.permission.WRITE_EXTERNAL_STORAGE'] === 'granted') {
 
                     this.gpsID = navigator.geolocation.watchPosition(
@@ -129,6 +130,7 @@ class WeatherCard extends Component {
         }
     }
 
+    /** Calls weather api for new data */
     _refreshPressed() {
         this.setState({ loading: true });
         this.gpsID = navigator.geolocation.watchPosition(
@@ -162,6 +164,7 @@ class WeatherCard extends Component {
         }
     }
 
+    /** Calls weather api */
     _loadWeatherInfo() {
         weatherService.getCurrentWeather(this.state.latitude, this.state.longitude)
             .then((results) => {
@@ -173,6 +176,7 @@ class WeatherCard extends Component {
         navigator.geolocation.clearWatch(this.gpsID);
     }
 
+    /** Save activity start weather to local storage */
     _saveStartWeather(weatherObj) {
 
         let today = new Date();

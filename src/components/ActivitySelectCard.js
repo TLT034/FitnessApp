@@ -11,6 +11,7 @@ class ActivitySelectCard extends Component {
     render() {
 
         return (
+            /* Card similar to radio button group, allowing user to select what type of activity they are doing */
             <Card>
                 <CardItem style={{ flexDirection: 'column' }}>
                     <View style={styles.header}>

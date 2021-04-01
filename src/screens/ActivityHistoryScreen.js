@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, FlatList } from 'react-native';
-import { Card, CardItem, Container, Content, Text, Button, Picker, List, ListItem, Left, Right, Body } from 'native-base';
+import { View, FlatList } from 'react-native';
+import { Container, Content, Text, Button, Picker, List, ListItem, Left, Right, Body } from 'native-base';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 

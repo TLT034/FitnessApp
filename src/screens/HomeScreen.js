@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Content, Text, Button, Fab } from 'native-base';
-import { PermissionsAndroid, Alert } from 'react-native';
+import { Container, Content, Button, Fab } from 'native-base';
+import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 
@@ -40,14 +40,18 @@ class HomeScreen extends Component {
     render() {
         return (
             <Container style={{ backgroundColor: '#f2f2f2' }}>
+                {/* Hides activity fab on blur */}
                 <NavigationEvents
                     onDidBlur={() => this.setState({active: false})}
                 />
+
                 <Content>
                     <WeatherCard refreshable={true} type={'home'} />
                     <TotalsCard />
                     <RewardsCard />
                 </Content>
+
+                {/* Activity fab for starting an activity */}
                 <Fab
                     style={{ backgroundColor: '#03256C'}}
                     active={this.state.active}
@@ -78,13 +82,14 @@ class HomeScreen extends Component {
         );
     }
 
+    /** Navigates to the start activity screen */
     _startActiviy(type) {
         this.props.addActivityType(type);
         navigationService.navigate('StartActivity');
     }
 
+    /** Loads users 'totals', 'activities', and 'rewards' from local storage */
     _loadSavedData() {
-
         dataController.getStorageItem('totals')
             .then(result => {
                 this.props.loadTotals(result);
@@ -116,7 +121,7 @@ class HomeScreen extends Component {
     }
 }
 
-
+/** Redux */
 function mapDispatchToProps(dispatch) {
     return {
         addActivityType: (activityType) => dispatch(addActivityType(activityType)),

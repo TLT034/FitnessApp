@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Card, CardItem, Container, Header, Content,  Text, Body, Button, Left, Right, View } from 'native-base';
+import { Card, CardItem, Container, Content,  Text, Button, View } from 'native-base';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
 import BackgroundTimer from 'react-native-background-timer';
-import { NavigationEvents } from 'react-navigation';
 
 import { addStats, addRouteCoords } from '../redux/actions/currentActivityActions';
 
-import WeatherCard from '../components/WeatherCard';
 import navigationService from '../services/NavigationService';
 
 
@@ -112,6 +110,7 @@ class DuringActivityScreen extends Component {
         );
     }
 
+    /** Calculates distance travelled since last coordinate */
     _calcDistance(newCoord) {
         const prevCoord = this.state.prevCoordinate;
         let km = haversine(prevCoord, newCoord) || 0;
@@ -133,11 +132,13 @@ class DuringActivityScreen extends Component {
         return hours + ':' + minutes + ':' + seconds;
     }
 
+    /** Updates overall pace each render */
     _calcPace() {
         let mph = this.state.distance / (this.state.time / 3600);
         return mph.toFixed(2).toString() + ' mph';
     }
 
+    /**  Pauses all calculations */
     _togglePause() {
         if (this.state.paused) {
             this.timer = BackgroundTimer.setInterval(() => {
@@ -160,6 +161,7 @@ class DuringActivityScreen extends Component {
         return 'Pause';
     }
 
+    /** Save statistcs to local storage and navigate to post activity screen */
     _endActivity() {
         // prevent 0/0 error
         let time = 1;
@@ -180,7 +182,7 @@ class DuringActivityScreen extends Component {
     }
 }
 
-
+/** Redux */
 function mapDispatchToProps(dispatch) {
     return {
         addStats: (dur, dist, p) => dispatch(addStats(dur, dist, p)),

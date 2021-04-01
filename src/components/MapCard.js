@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardItem, Text, Body, Content, View, Spinner } from 'native-base';
 import MapView, { PROVIDER_GOOGLE, Callout, Marker, Polyline} from 'react-native-maps';
-import { PermissionsAndroid, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationEvents } from 'react-navigation';
 
@@ -27,6 +27,7 @@ class MapCard extends Component {
     }
 
     componentDidMount() {
+        /** If the mapcard is being used to display the map before starting the activity */
         if (this.props.type === 'start') {
 
             this.gpsID = navigator.geolocation.watchPosition(
@@ -46,6 +47,7 @@ class MapCard extends Component {
                 { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 5 },
             );
         }
+        /** If the mapcard is being used to display activity path in activity report */
         else if (this.props.type === 'end') {
 
             if (this.props.currentActivity.routeCoordinates.length > 1) {
@@ -102,7 +104,7 @@ class MapCard extends Component {
         );
     }
 
-
+    /** Simple feedback message to user if map loading is taking a while */
     _renderPositionLoad() {
         if (this.state.positionLoading) {
             if (this.props.type === 'start') {
@@ -132,6 +134,7 @@ class MapCard extends Component {
         }
     }
 
+    /** Draws a path by drawing a line between every captured coordinate */
     _drawMarkers() {
         if (this.props.type === 'start') {
             return (

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Image, Alert } from 'react-native'; 
+import { StyleSheet, Image, Alert } from 'react-native'; 
 import { Card, CardItem, Container, Content, Text, Button, Form, Input, Label, Item } from 'native-base';
 import { connect } from 'react-redux';
 import NotificationService from '../services/NotificationService';
@@ -101,7 +101,7 @@ class PostActivityScreen extends Component {
         );
     }
 
-
+    /** Renders an image if available, otherwise renders button to take picture */
     _renderImage() {
         if (this.props.currentActivity.imgPath === "No Image") {
             return (
@@ -124,6 +124,7 @@ class PostActivityScreen extends Component {
         }
     }
 
+    /** Share activity stats and image via any sharing method available on device */
     _openShare() {
         RNFetchBlob.fs.readFile(this.props.currentActivity.imgPath, 'base64')
             .then((data) => {
@@ -156,6 +157,7 @@ class PostActivityScreen extends Component {
         return hours + ':' + minutes + ':' + seconds;
     }
 
+    /** Saves activity to storage and sends notification to device */
     _saveActivity() {
         this.notificationService.activityNotification(
             "Activity Complete!",
@@ -169,6 +171,7 @@ class PostActivityScreen extends Component {
         this.props.addActivity(this.props.currentActivity);
     }
 
+    /** Gives confirmation alert, then clears props and navigates to home screen */
     _deleteActivity() {
         Alert.alert(
             `Delete ${this.props.currentActivity.type}`,
@@ -276,6 +279,7 @@ class PostActivityScreen extends Component {
 
     }
 
+    /** If the user saves the activity, update users statistics and check for rewards */
     componentDidUpdate(prevProps) {
         if (prevProps.activities !== this.props.activities) {
             this.props.updateTotals(
@@ -293,6 +297,7 @@ class PostActivityScreen extends Component {
     }
 }
 
+/** Redux */
 function mapDispatchToProps(dispatch) {
     return {
         /* currentActivity */
